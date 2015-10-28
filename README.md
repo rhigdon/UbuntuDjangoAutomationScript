@@ -8,5 +8,12 @@ Overview
   4. configure nginx for proxy
   5. update iptables
 
-Usage
+##Usage
     ./build.sh
+
+##packages
+  1. git
+  2. python
+  3. nginx
+  4. django
+  5. ssh
