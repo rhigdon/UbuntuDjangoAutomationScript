@@ -1,5 +1,5 @@
 #First install out itps to apt-get
-apt-get -y install ssh git python-pip nginx
+apt-get -y install ssh git python-pip nginx python-dev
 
 SRC="git@github.com:rhigdon/UbuntuDjangoAutomationScript.git"
 REPOSRC="git://github.com/kirpit/django-sample-app.git"
