@@ -24,4 +24,3 @@ at this point you can just continue to use the build script to start the process
 1. Migrate from sqlite3 to Postgres
 2. pull down this repo if it doesnt exist (bootstrap script?)
 3. port forwarding for proxy? 8002 outbound?
-4. django compressor? how u work
