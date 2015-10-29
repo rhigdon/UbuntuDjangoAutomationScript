@@ -10,6 +10,9 @@ Overview
   6. update iptables
 
 ##Usage
+    sudo apt-get install git
+    git clone https://github.com/rhigdon/UbuntuDjangoAutomationScript.git
+    cd UbuntuAutomationScript
     ./build.sh
 
 ##Stopping the WSGI Process
