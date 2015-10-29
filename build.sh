@@ -4,7 +4,7 @@ sudo iptables -P FORWARD ACCEPT
 sudo iptables -F
 
 #First install out itps to apt-get
-apt-get -y install ssh git python-pip nginx python-dev libpq-dev
+sudo apt-get -y install ssh git python-pip nginx python-dev libpq-dev
 
 SRC="git@github.com:rhigdon/UbuntuDjangoAutomationScript.git"
 REPOSRC="git://github.com/kirpit/django-sample-app.git"
@@ -81,7 +81,6 @@ sudo iptables -A INPUT -p tcp -m tcp --dport 8000 -j ACCEPT
 sudo iptables -A OUTPUT -o eth0 -p tcp --sport 8000 -m state --state ESTABLISHED -j ACCEPT
 
 # allow 22 ssh for these networks
-sudo iptables -A INPUT -i eth0 -p tcp -s 10.0.1.7/10.0.1.255 --dport 22 -m state --state NEW,ESTABLISHED -j ACCEPT
 sudo iptables -A INPUT -p tcp -s 192.168.0.0/24 -m tcp --dport 22 -j ACCEPT
 sudo iptables -A INPUT -p tcp -s 10.0.0.0/8 -m tcp --dport 22 -j ACCEPT
 sudo iptables -A INPUT -p tcp -s 172.0.0.0/8 -m tcp --dport 22 -j ACCEPT
