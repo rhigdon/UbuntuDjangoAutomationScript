@@ -21,7 +21,7 @@ fi
 LOCALREPO_VC_DIR=/sandbox/django-sample-app
 if [ ! -d $LOCALREPO_VC_DIR ]
 then
-    git clone $REPOSRC 
+    git clone $REPOSRC $LOCALREPO_VC_DIR
 fi
 
 #check if python virtual environment exists.. otherwise create it
@@ -41,8 +41,12 @@ pip install -r /sandbox/django-sample-app/requirements.txt
 #Our sample app has a default template we need to replace
 #this is something that could be done with puppet/chef
 find /sandbox/django-sample-app/ -type f -exec sed -i 's/{{ project_name }}/projectname/g' {} +
-find /sandbox/django-sample-app/ -type f -exec sed -i 's/django.db.backends.sqlite3/django.db.backends.sqlite3/g' {} +
-find /sandbox/django-sample-app/ -type f -exec sed -i 's/ALLOWED_HOSTS = (/ALLOWED_HOSTS =  ("localhost"/g' {} +
+find /sandbox/django-sample-app/ -type f -exec sed -i 's/django.db.backends.postgresql_psycopg2/django.db.backends.sqlite3/g' {} +
+find /sandbox/django-sample-app/ -type f -exec sed -i 's/ALLOWED_HOSTS = (/ALLOWED_HOSTS =  ("*"/g' {} +
+
+python /sandbox/django-sample-app/projectname/manage.py migrate
+python /sandbox/django-sample-app/projectname/manage.py migrate
+python /sandbox/django-sample-app/projectname/manage.py compress --force
 
 #now configure proxy for nginx
 sudo cp nginx.conf /etc/nginx/sites-enabled/default

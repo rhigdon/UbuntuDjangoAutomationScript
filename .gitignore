@@ -1,2 +1,3 @@
 django-sample-app/
 environment/
+{{ db_name }}
