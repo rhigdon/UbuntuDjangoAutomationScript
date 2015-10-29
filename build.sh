@@ -9,18 +9,19 @@ apt-get -y install ssh git python-pip nginx python-dev libpq-dev
 SRC="git@github.com:rhigdon/UbuntuDjangoAutomationScript.git"
 REPOSRC="git://github.com/kirpit/django-sample-app.git"
 
-#check to see if we have a copy of the django repo.. of not go get it
-LOCALREPO_VC_DIR=django-sample-app
-if [ ! -d $LOCALREPO_VC_DIR ]
-then
-    git clone $REPOSRC 
-fi
-
+#check to see if we have our sandbox to play in
 SANDBOX_DIR=/sandbox/
 if [ ! -d $SANDBOX_DIR ]
 then
     sudo mkdir /sandbox/
     sudo chmod 777 /sandbox/
+fi
+
+#check to see if we have a copy of the django repo.. of not go get it
+LOCALREPO_VC_DIR=/sandbox/django-sample-app
+if [ ! -d $LOCALREPO_VC_DIR ]
+then
+    git clone $REPOSRC 
 fi
 
 #check if python virtual environment exists.. otherwise create it
@@ -35,13 +36,13 @@ then
 fi
 
 source environment/bin/activate
-pip install -r django-sample-app/requirements.txt
+pip install -r /sandbox/django-sample-app/requirements.txt
 
 #Our sample app has a default template we need to replace
 #this is something that could be done with puppet/chef
-find django-sample-app/ -type f -exec sed -i 's/{{ project_name }}/projectname/g' {} +
-find django-sample-app/ -type f -exec sed -i 's/django.db.backends.sqlite3/django.db.backends.sqlite3/g' {} +
-find django-sample-app/ -type f -exec sed -i 's/ALLOWED_HOSTS = ("localhost"/g' {} +
+find /sandbox/django-sample-app/ -type f -exec sed -i 's/{{ project_name }}/projectname/g' {} +
+find /sandbox/django-sample-app/ -type f -exec sed -i 's/django.db.backends.sqlite3/django.db.backends.sqlite3/g' {} +
+find /sandbox/django-sample-app/ -type f -exec sed -i 's/ALLOWED_HOSTS = (/ALLOWED_HOSTS =  ("localhost"/g' {} +
 
 #now configure proxy for nginx
 sudo cp nginx.conf /etc/nginx/sites-enabled/default
@@ -49,15 +50,8 @@ sudo cp myssl.crt /etc/ssl/certs/myssl.crt
 sudo cp myssl.key /etc/ssl/private/myssl.key
 
 sudo cp uwsgi_params /sandbox/
-SANDBOX_APP=/sandbox/django-sample-app/
-if [ ! -d $SANDBOX_APP ]
-then
-    sudo cp -rf django-sample-app/ /sandbox/django-sample-app/
-fi
 
 pip install uwsgi
-
-source environment/bin/activate
 environment/bin/uwsgi --ini projectname.ini --socket :8002 > /dev/null 2>&1 &
 
 #####Begin IP Tables Rules#######
